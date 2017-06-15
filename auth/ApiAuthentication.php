@@ -2,6 +2,9 @@
 
 class ApiAuthentication{
 
+    // This is just for DEV.
+
+
     private $key = 999;
 
     function checkKey($keyIn){
