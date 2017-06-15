@@ -5,7 +5,7 @@ class ApiAuthentication{
     // This is just for DEV.
 
 
-    private $key = 999;
+    private $key = ***;
 
     function checkKey($keyIn){
         if($this->key === intval($keyIn)){
