@@ -12,7 +12,8 @@ class UserHelper{
 
     function deleteUser($db, $username, $password){
         $userID = $this->getUserID($db, $username);
-        $SQL_DELETE_USER = "DELETE FROM users WHERE userID = $userID AND passowrd='$password'";
+        $val = intval($userID);
+        $SQL_DELETE_USER = "DELETE FROM users WHERE userID = $val AND password='$password'";
 
         if(mysqli_query($db->getConnection(), $SQL_DELETE_USER)){
             $this->response->getSuccessResponse("deleted user account");
