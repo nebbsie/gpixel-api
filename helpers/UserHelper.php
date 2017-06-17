@@ -10,6 +10,18 @@ class UserHelper{
         $this->response = new Response();
     }
 
+    function deleteUser($db, $username, $password){
+        $userID = $this->getUserID($db, $username);
+        $SQL_DELETE_USER = "DELETE FROM users WHERE userID = $userID AND passowrd='$password'";
+
+        if(mysqli_query($db->getConnection(), $SQL_DELETE_USER)){
+            $this->response->getSuccessResponse("deleted user account");
+        }else{
+            $this->response->getFailedResponse("Failed to delete user account.");
+        }
+        
+    }
+
     function updateUser($db, $username, $password, $email){
         $SQL_UPDATE_USER = "UPDATE users SET username='$username' , password='$password', userEmail='$email'
                             WHERE username = '$username'";
