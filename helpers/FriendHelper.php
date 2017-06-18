@@ -7,9 +7,32 @@ class FriendHelper{
     private $response;
     private $helper;
 
+    // 0 Pending
+    // 1 Friends
+    // 2 Blocked
+
     public function __construct(){
         $this->response = new Response();
         $this->helper = new UserHelper();
+    }
+
+    function getAllFriends($db, $username){
+        $userID = $this->helper->getUserID($db, $username);
+        $SQL_GET_ALL_FRIENDS = "SELECT * FROM friends WHERE relationship = 1 AND  user1ID = $userID OR user2ID = $userID";
+
+        $result = $db->getConnection()->query($SQL_GET_ALL_FRIENDS);
+        // Check if the query returned a result
+        if($result->num_rows > 0 ){
+            // Put each object into the array and return to user
+            $data = array();
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            // Return JSON
+            $this->response->getSuccessResponse($data);
+        }else{
+            $this->response->getFailedResponse("no friends found.");
+        }
     }
 
     function deleteFriend($db, $friendLink){
@@ -18,6 +41,15 @@ class FriendHelper{
             $this->response->getSuccessResponse("deleted friend link");
         }else{
             $this->response->getFailedResponse("failed to delete friend link");
+        }
+    }
+
+    function blockFriend($db, $friendLinkID){
+        $SQL_BLOCK_USER = "UPDATE friends SET relationship=2 WHERE friendLinkID=$friendLinkID";
+        if(mysqli_query($db->getConnection(), $SQL_BLOCK_USER)){
+            $this->response->getSuccessResponse("blocked friend");
+        }else{
+            $this->response->getFailedResponse("failed to block friend");
         }
     }
 

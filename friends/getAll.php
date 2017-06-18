@@ -12,7 +12,6 @@ $auth = new ApiAuthentication();
 $response = new Response();
 $fHelper = new FriendHelper();
 $username = $_POST['username'];
-$friendID = $_POST['friendLinkID'];
 $apiKey = $_POST['apiKey'];
 
 
@@ -21,11 +20,11 @@ if(isset($apiKey)){
     // Check if the API key is valid.
     if($auth->checkKey($apiKey)){
         // Check if the user has sent the required POST data.
-        if(isset($username) && isset($friendID)){
+        if(isset($username)){
             // Check if connected to the SQL database.
             if($db->connect()){
                 // Connected and authenticated, attempt login.
-                $fHelper->blockFriend($db, $friendID);
+                $fHelper->getAllFriends($db, $username);
             }else{
                 echo $response->getFailedResponse("Could not connect to the database.");
             }
